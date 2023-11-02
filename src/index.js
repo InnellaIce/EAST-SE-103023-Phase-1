@@ -6,23 +6,54 @@ const bookForm = document.querySelector('#book-form'); //book form
 
 //✅ 1a. start json-server, examine data structure
 //✅ 1b. use chat-gpt to generate additional stores
-    //generate JSON for 5 technology bookstores with the following fields: location, name, address, number
-    //add an id field that increments by one starting with an id of 4
+//generate JSON for 5 technology bookstores with the following fields: location, name, address, number
+//add an id field that increments by one starting with an id of 4
 
 
 ///////////////////////////////
 // communicating with server //
 ///////////////////////////////
-//✅ 2. fetch request to get all books
+
 //✅ 2a. save the base url as a const (to reuse later)
   //✅ 2b. render books from database instead of from data.js
+//saving in const for ease of access later on
+const url = "http://localhost:3000"
+//✅ 2. fetch request to get all books
+fetch(`${url}/books`) //returns promise
+//promise is resolved
+.then((res) => {
+  console.log(res)
+  return res.json() //res.json returns a promise
+})
+.then((data) => {
+  //coming from data.js
+  //bookStore.inventory.forEach(renderBook)
+  //data is coming from our json-server (localhose:3000) which is connected to db.json
+  console.log(data)
+  data.forEach(renderBook)
+})
+
 
 
 //✅ 3. use db.json to get information about the store
 //✅ 3a. make a fetch request
   //✅ 3b. use data to update DOM
 //✅ 3c. add a .catch for errors
+fetch(`${url}/stores/3`)
+.then((res) => { return res.json() }) 
+//.then(res => res.json()) //shorthand for the above
+.then((stores) => {
+  console.log(stores)
+  renderHeader(stores)
+  renderFooter(stores)
+})
+.catch((err) => {
+  //typically, render an error message on page
+  console.log(`there was an error: ${err}`)
+})
 
+
+console.log("This is after the fetch statement")
 /**
  * 
  * 
@@ -129,7 +160,5 @@ bookForm.addEventListener('submit', (e) => {
 renderHeader(bookStore)
 renderFooter(bookStore)
 bookStore.inventory.forEach(renderBook)
-
-
 
 
